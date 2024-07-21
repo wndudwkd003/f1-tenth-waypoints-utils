@@ -4,4 +4,11 @@
 # But not these files...
 !.gitignore
 !projects/
-!projects/**/
+!projects/**
+
+# Don't ignore specific files outside the projects directory
+!utils/**
+!static/**
+!models/**
+!viewmodels/**
+!views/**

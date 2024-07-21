@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QInputDialog, QFileDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QInputDialog, QFileDialog, QTableWidgetItem, QMessageBox
+from PyQt5.QtGui import QColor, QBrush
 
 class MainView(QMainWindow):
     def __init__(self, ui_window):
@@ -18,6 +19,7 @@ class MainView(QMainWindow):
         self.ui.pbtn_map_window.clicked.connect(viewmodel.map_window_clicked)
         self.ui.le_min_speed.textChanged.connect(viewmodel.min_speed_changed)
         self.ui.le_max_speed.textChanged.connect(viewmodel.max_speed_changed)
+        self.ui.pbtn_select_waypoint.clicked.connect(viewmodel.select_waypoint)
 
     def get_project_name(self):
         project_name, ok = QInputDialog.getText(self, 'New Project', 'Enter project name:')
@@ -110,3 +112,18 @@ class MainView(QMainWindow):
         self.ui.tw_selected_waypoints.setItem(row_position, 0, QTableWidgetItem(str(x)))
         self.ui.tw_selected_waypoints.setItem(row_position, 1, QTableWidgetItem(str(y)))
         self.ui.tw_selected_waypoints.setItem(row_position, 2, QTableWidgetItem(str(speed)))
+
+    def highlight_table_range(self, indexes):
+        for row in indexes:
+            for col in range(self.ui.tw_selected_waypoints.columnCount()):
+                item = self.ui.tw_selected_waypoints.item(row, col)
+                if item:
+                    item.setForeground(QBrush(QColor("red")))
+
+    def clear_table_range_highlight(self, indexes):
+        for row in indexes:
+            for col in range(self.ui.tw_selected_waypoints.columnCount()):
+                item = self.ui.tw_selected_waypoints.item(row, col)
+                if item:
+                    item.setForeground(QBrush(QColor("black")))
+

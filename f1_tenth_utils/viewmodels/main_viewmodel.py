@@ -204,6 +204,32 @@ class MainViewModel(QObject):
                 QMessageBox.warning(None, 'Error', f'Failed to copy CSV files: {e}')
 
     @pyqtSlot()
+    def select_waypoint(self):
+        start_idx = int(self._view.ui.le_select_start_idx.text()) - 1  # 1을 빼서 0부터 시작하도록 조정
+        dest_idx = int(self._view.ui.le_select_dest_idx.text()) - 1  # 1을 빼서 0부터 시작하도록 조정
+
+        if start_idx > dest_idx:
+            QMessageBox.warning(None, 'Error', 'Start index cannot be greater than Dest index.')
+            return
+
+        total_rows = self._view.ui.tw_selected_waypoints.rowCount()
+        if start_idx < 0 or dest_idx >= total_rows:
+            QMessageBox.warning(None, 'Error', 'Selected range is out of bounds.')
+            return
+
+        # 이전 선택 해제
+        old_selected_indexes = self._model.get_selected_indexes()
+        self._view.clear_table_range_highlight(old_selected_indexes)
+
+        # 새로운 선택 적용
+        selected_indexes = list(range(start_idx, dest_idx + 1))
+        self._model.set_selected_indexes(selected_indexes)
+
+        # 새로운 선택 강조 표시
+        self._view.highlight_table_range(selected_indexes)
+        print(f"Waypoints from index {start_idx + 1} to {dest_idx + 1} added.")  # 출력 시에는 다시 1을 더해서 사용자에게 표시
+
+    @pyqtSlot()
     def map_window_clicked(self):
         print("pbtn_map_window 이거를 클릭함")
 
@@ -216,3 +242,4 @@ class MainViewModel(QObject):
     def max_speed_changed(self, value):
         self._model.set_max_speed(value)
         print(f"Maximum speed: {value}")
+

@@ -19,6 +19,15 @@ class MainModel:
         self._current_change = None
         self._auto_backup = None
         self._backup_name = None
+        self._selected_indexes = []
+
+
+
+    def set_selected_indexes(self, indexes):
+        self._selected_indexes = indexes
+
+    def get_selected_indexes(self):
+        return self._selected_indexes
 
     def set_project_name(self, name):
         self._project_name = name

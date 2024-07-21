@@ -336,11 +336,6 @@
     </attribute>
     <column>
      <property name="text">
-      <string>idx</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
       <string>x</string>
      </property>
     </column>
@@ -1084,7 +1079,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Project</string>
     </property>
     <addaction name="actionNew_Project"/>
     <addaction name="actionLoad_Project"/>
@@ -1098,7 +1093,22 @@
     <addaction name="actionShow_Help"/>
     <addaction name="actionInfo"/>
    </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <addaction name="actionopen_setting"/>
+   </widget>
+   <widget class="QMenu" name="menuLoad">
+    <property name="title">
+     <string>Load</string>
+    </property>
+    <addaction name="actionLoad_Map"/>
+    <addaction name="actionLoad_CSV"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuLoad"/>
+   <addaction name="menuSetting"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -1130,6 +1140,21 @@
   <action name="actionInfo">
    <property name="text">
     <string>Info</string>
+   </property>
+  </action>
+  <action name="actionopen_setting">
+   <property name="text">
+    <string>Open setting</string>
+   </property>
+  </action>
+  <action name="actionLoad_Map">
+   <property name="text">
+    <string>Load Map</string>
+   </property>
+  </action>
+  <action name="actionLoad_CSV">
+   <property name="text">
+    <string>Load CSV</string>
    </property>
   </action>
  </widget>

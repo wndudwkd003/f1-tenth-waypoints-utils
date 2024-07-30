@@ -4,6 +4,8 @@ from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtWidgets import QMessageBox
 from f1_tenth_utils.static.ProjectManager import ProjectManager
 from f1_tenth_utils.utils.csv_index_helper import copy_csv_files, load_csv_file
+import shutil
+
 
 class MainViewModel(QObject):
     def __init__(self, model, view):
@@ -179,10 +181,26 @@ class MainViewModel(QObject):
 
     @pyqtSlot()
     def load_map(self):
-        file_name = self._view.load_map()
-        if file_name:
-            print(f"Map file loaded: {file_name}")
-            # 여기에 로드된 맵 파일을 처리하는 코드를 추가하세요.
+        files = self._view.load_map()
+        if files:
+            map_file, yaml_file = files
+            print(f"Map file loaded: {map_file}")
+            print(f"YAML file loaded: {yaml_file}")
+
+            # 맵 파일과 YAML 파일을 프로젝트 디렉토리의 fundamental/map 폴더로 복사
+            project_dir = os.path.join(self.pm.projects_path, self._model.get_project_name())
+            map_dir = os.path.join(project_dir, 'fundamental', 'map')
+            os.makedirs(map_dir, exist_ok=True)
+            try:
+                shutil.copy(map_file, map_dir)
+                shutil.copy(yaml_file, map_dir)
+                print(f"Map and YAML files copied to: {map_dir}")
+
+                # 맵 파일을 모델에 저장
+                self._model.set_map_file_path(map_file)
+                self._view.display_map(map_file)  # 맵 파일 화면에 표시
+            except Exception as e:
+                QMessageBox.warning(None, 'Error', f'Failed to copy map or YAML file: {e}')
 
     @pyqtSlot()
     def load_csv(self):
@@ -242,4 +260,3 @@ class MainViewModel(QObject):
     def max_speed_changed(self, value):
         self._model.set_max_speed(value)
         print(f"Maximum speed: {value}")
-

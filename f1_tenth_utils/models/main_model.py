@@ -20,8 +20,13 @@ class MainModel:
         self._auto_backup = None
         self._backup_name = None
         self._selected_indexes = []
+        self._map_file_path = None
 
+    def set_map_file_path(self, path):
+        self._map_file_path = path
 
+    def get_map_file_path(self):
+        return self._map_file_path
 
     def set_selected_indexes(self, indexes):
         self._selected_indexes = indexes

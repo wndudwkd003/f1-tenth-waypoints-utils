@@ -1,10 +1,16 @@
+import os.path
+
 from PyQt5.QtWidgets import QMainWindow, QInputDialog, QFileDialog, QTableWidgetItem, QMessageBox
 from PyQt5.QtGui import QColor, QBrush
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.image as mpimg
 
 class MainView(QMainWindow):
     def __init__(self, ui_window):
         super().__init__()
         self.ui = ui_window
+        self.map_canvas = None
 
     def setup_connections(self, viewmodel):
         # Action project
@@ -35,9 +41,33 @@ class MainView(QMainWindow):
     def load_map(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
-        file_name, _ = QFileDialog.getOpenFileName(self, "Load Map", "",
-                                                   "Map Files (*.map);;All Files (*)", options=options)
-        return file_name
+        files, _ = QFileDialog.getOpenFileNames(self, "Load Map", "",
+                                                    "Map Files (*.pgm *.png *.yaml);;All Files (*)", options=options)
+        if files:
+            # 파일 확장자 검증
+            valid_extensions = {'.pgm', '.png', '.yaml'}
+            selected_files = [file for file in files if os.path.splitext(file)[1].lower() in valid_extensions]
+
+            if len(selected_files) != 2:
+                QMessageBox.warning(self, 'Invalid Selection', 'Please select exactly two files: one map file (.pgm or .png) and one YAML file.')
+                return None
+
+            map_files = set()
+            yaml_files = set()
+
+            for file in selected_files:
+                file_extension = os.path.splitext(file)[1].lower()
+                if file_extension in {'.pgm', '.png'}:
+                    map_files.add(file)
+                elif file_extension == '.yaml':
+                    yaml_files.add(file)
+
+            if len(map_files) != 1 or len(yaml_files) != 1:
+                QMessageBox.warning(self, 'Invalid Selection',
+                                    'Please select one map file (.pgm or .png) and one YAML file.')
+                return None
+
+            return map_files.pop(), yaml_files.pop()
 
     def load_csv(self):
         options = QFileDialog.Options()
@@ -126,4 +156,18 @@ class MainView(QMainWindow):
                 item = self.ui.tw_selected_waypoints.item(row, col)
                 if item:
                     item.setForeground(QBrush(QColor("black")))
+
+
+    def display_map(self, map_path):
+        if hasattr(self, 'map_canvas') and self.map_canvas is not None:
+            # 기존의 캔버스가 있다면 제거
+            layout = self.ui.w_map.layout()
+            if layout:
+                layout.removeWidget(self.map_canvas)
+                self.map_canvas.deleteLater()
+            self.map_canvas = None
+
+        # 새로운 캔버스 생성
+        fig = Figure()
+        self.map_canvas = FigureCanvas(fig)
 

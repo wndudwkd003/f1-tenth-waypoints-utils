@@ -1,5 +1,6 @@
 import os
 
+
 class SingletonMeta(type):
     _instances = {}
 
@@ -15,3 +16,5 @@ class ProjectManager(metaclass=SingletonMeta):
         self.value = None
         self.src_code_path = None
         self.projects_path = None
+        self.project_path = None
+        self.f1tp_file_path = None

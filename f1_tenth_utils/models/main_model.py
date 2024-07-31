@@ -1,3 +1,5 @@
+import pandas as pd
+
 class MainModel:
     def __init__(self):
         self._project_name = None
@@ -20,13 +22,62 @@ class MainModel:
         self._auto_backup = None
         self._backup_name = None
         self._selected_indexes = []
+        self._map_file_content = None
+        self._yaml_file_content = None
+        self._csv_data = None
         self._map_file_path = None
+        self._yaml_file_path = None
+        self._csv_folder_path = None
+        self._percentage_speed = None
+        self._constant_speed = None
+
+    def set_percentage_speed(self, percentage_speed):
+        self._percentage_speed = percentage_speed
+
+    def get_percentage_speed(self):
+        return self._percentage_speed
+
+    def set_constant_speed(self, constant_speed):
+        self._constant_speed = constant_speed
+
+    def get_constant_speed(self):
+        return self._constant_speed
+
+    def set_map_file_content(self, content):
+        self._map_file_content = content
+
+    def get_map_file_content(self):
+        return self._map_file_content
+
+    def set_yaml_file_content(self, content):
+        self._yaml_file_content = content
+
+    def get_yaml_file_content(self):
+        return self._yaml_file_content
+
+    def set_csv_data(self, data):
+        self._csv_data = data
+
+    def get_csv_data(self):
+        return self._csv_data
 
     def set_map_file_path(self, path):
         self._map_file_path = path
 
     def get_map_file_path(self):
         return self._map_file_path
+
+    def set_yaml_file_path(self, path):
+        self._yaml_file_path = path
+
+    def get_yaml_file_path(self):
+        return self._yaml_file_path
+
+    def set_csv_folder_path(self, path):
+        self._csv_folder_path = path
+
+    def get_csv_folder_path(self):
+        return self._csv_folder_path
 
     def set_selected_indexes(self, indexes):
         self._selected_indexes = indexes
